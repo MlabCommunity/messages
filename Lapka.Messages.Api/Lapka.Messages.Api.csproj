@@ -10,4 +10,16 @@
       <ProjectReference Include="..\Lapka.Messages.Infrastructure\Lapka.Messages.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0-rc.1.22426.7">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Hubs" />
+    </ItemGroup>
+
 </Project>

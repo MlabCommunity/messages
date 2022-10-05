@@ -19,7 +19,6 @@ COPY --from=build /app/out .
 ARG BUILD_VERSION
 ENV BUILD_VERSION $BUILD_VERSION
 
-ENV ASPNETCORE_URLS=http://+:5040
-ENV ASPNETCORE_URLS=http://+:5041
+ENV ASPNETCORE_URLS=http://+:5050
 
 ENTRYPOINT ["dotnet", "Lapka.Messages.Api.dll"]

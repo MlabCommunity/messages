@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Convey;
 using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.RabbitMQ;
+using Lapka.Messages.Api.Hubs;
 using Lapka.Messages.Application;
 using Lapka.Messages.Application.ExternalEvents;
 using Lapka.Messages.Infrastructure;
@@ -11,7 +12,7 @@ using Lapka.Messages.Infrastructure.Jwt;
 var builder = WebApplication.CreateBuilder(args);
 
 
-
+builder.Services.AddSignalR();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddControllers()
