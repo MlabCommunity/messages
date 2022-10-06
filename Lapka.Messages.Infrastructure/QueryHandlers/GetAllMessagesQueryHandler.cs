@@ -1,19 +1,46 @@
 ﻿using Convey.CQRS.Queries;
 using Lapka.Messages.Application.Queries;
 using Lapka.Messages.Core;
+using Lapka.Messages.Infrastructure.Database.Contexts;
+using Lapka.Messages.Infrastructure.Mapper;
 using Microsoft.EntityFrameworkCore;
 using MessageDto = Lapka.Messages.Application.Dto.MessageDto;
 
 namespace Lapka.Messages.Infrastructure.QueryHandlers;
 
-internal sealed class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery,PagedResult<MessageDto>>
+internal sealed class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery, Application.Dto.PagedResult<MessageDto>>
 {
-    private readonly DbSet<Message> _messages;
-    private readonly DbSet<AppUser> _appUsers;
     private readonly DbSet<Room> _rooms;
-    
-    public Task<PagedResult<MessageDto>> HandleAsync(GetAllMessagesQuery query, CancellationToken cancellationToken = new CancellationToken())
+
+    public GetAllMessagesQueryHandler(AppDbContext context)
     {
-        
+        _rooms = context.Rooms;
+    }
+
+    public async Task<Application.Dto.PagedResult<MessageDto>> HandleAsync(GetAllMessagesQuery query, CancellationToken cancellationToken = new CancellationToken())
+    {
+        var rooms =  await _rooms
+            .Include(x => x.AppUsers)
+            .Where(x => x.AppUsers.Any(x => x.UserId == query.RecieverID)).ToListAsync();
+
+        var roomId =rooms
+            .Where(x=>x.AppUsers.Any(x=>x.UserId==query.PrincipalId)).Select(x=>x.RoomId).FirstOrDefault();
+     
+        var messages = await _rooms
+            .Include(x => x.Messages)
+            .Where(x => x.RoomId == roomId)
+            .Select(x => x.Messages
+                .OrderByDescending(x=>x.CreatedAt)
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
+                .Select(x=>x.AsDto()).ToList()).FirstOrDefaultAsync();
+
+        var count = await _rooms
+            .Include(x => x.Messages)
+            .Where(x => x.RoomId == roomId)
+            .Select(x => x.Messages.Count())
+            .FirstOrDefaultAsync();
+            
+        return new Application.Dto.PagedResult<MessageDto>(messages, count, query.PageSize, query.PageNumber);
     }
 }

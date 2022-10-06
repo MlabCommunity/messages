@@ -1,6 +1,8 @@
 ﻿using Lapka.Messages.Infrastructure.Database;
 using Lapka.Messages.Infrastructure.Exceptions;
 using Lapka.Messages.Infrastructure.Services;
+using Lapka.Pet.Application.Services;
+using Lapka.Pet.Infrastructure.CacheStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,8 @@ public static class Extensions
         services.AddPostgres(configuration);
         services.AddHostedService<AppInitializer>();
         services.AddScoped<ExceptionMiddleware>();
+        services.AddScoped<ICacheStorage, CacheStorage>();
+        services.AddScoped<IUserCacheStorage, UserCacheStorage>();
 
         return services;
     }

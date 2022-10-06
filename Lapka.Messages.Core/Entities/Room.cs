@@ -3,17 +3,17 @@
 public class Room
 {
     public Guid RoomId { get; private set; }
-    public AppUser AppUser { get; private set; }
-    public List<Message> Messages { get; private set; }
+    public List<AppUser> AppUsers = new List<AppUser>();
+    public List<Message> Messages = new List<Message>();
 
     private Room()
     {
     }
 
-    public Room(Guid roomId,AppUser appUser, List<Message> messages)
+    public Room(AppUser user1, AppUser user2)
     {
-        AppUser = appUser;
-        RoomId = roomId;
-        Messages = messages;
+        AppUsers.Add(user1);
+        AppUsers.Add(user2);
+        RoomId = Guid.NewGuid();
     }
 }

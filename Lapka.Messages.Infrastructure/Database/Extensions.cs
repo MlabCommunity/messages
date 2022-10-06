@@ -13,6 +13,8 @@ public static class Extensions
     public static IServiceCollection AddPostgres(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IAppUserRepository,AppUserRepository>();
+        services.AddScoped<IRoomRepository, RoomRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
         
         var options = configuration.GetOptions<PostgresOptions>("Postgres");
         services.AddDbContext<AppDbContext>(ctx =>

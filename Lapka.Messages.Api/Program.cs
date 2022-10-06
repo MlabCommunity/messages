@@ -44,5 +44,6 @@ app.UseAuthorization();
 
 app.MapGet("/", ctx => ctx.Response.WriteAsync($"Lapka.Messages API {DateTime.Now}"));
 
+app.MapHub<RoomHub>("/chat");
 app.MapControllers();
 app.Run();
