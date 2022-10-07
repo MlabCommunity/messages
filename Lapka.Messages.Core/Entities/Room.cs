@@ -5,6 +5,7 @@ public class Room
     public Guid RoomId { get; private set; }
     public List<AppUser> AppUsers = new List<AppUser>();
     public List<Message> Messages = new List<Message>();
+    public int OnlineCount { get; private set; }
 
     private Room()
     {

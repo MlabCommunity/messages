@@ -2,4 +2,4 @@
 
 namespace Lapka.Messages.Application.Commands;
 
-public record EnsureRoomCommand(Guid PrincipalId, Guid ReceiverId) : ICommand;
+public record CreateRoomCommand(Guid PrincipalId,Guid ReceiverId) : ICommand;

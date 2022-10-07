@@ -19,16 +19,9 @@ internal sealed class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQ
 
     public async Task<Application.Dto.PagedResult<MessageDto>> HandleAsync(GetAllMessagesQuery query, CancellationToken cancellationToken = new CancellationToken())
     {
-        var rooms =  await _rooms
-            .Include(x => x.AppUsers)
-            .Where(x => x.AppUsers.Any(x => x.UserId == query.RecieverID)).ToListAsync();
-
-        var roomId =rooms
-            .Where(x=>x.AppUsers.Any(x=>x.UserId==query.PrincipalId)).Select(x=>x.RoomId).FirstOrDefault();
-     
         var messages = await _rooms
             .Include(x => x.Messages)
-            .Where(x => x.RoomId == roomId)
+            .Where(x => x.RoomId == query.RoomId)
             .Select(x => x.Messages
                 .OrderByDescending(x=>x.CreatedAt)
                 .Skip(query.PageSize * (query.PageNumber - 1))
@@ -37,7 +30,7 @@ internal sealed class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQ
 
         var count = await _rooms
             .Include(x => x.Messages)
-            .Where(x => x.RoomId == roomId)
+            .Where(x => x.RoomId == query.RoomId)
             .Select(x => x.Messages.Count())
             .FirstOrDefaultAsync();
             

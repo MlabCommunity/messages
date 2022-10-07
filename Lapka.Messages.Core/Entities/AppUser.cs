@@ -7,6 +7,7 @@ public class AppUser
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string? ProfilePicture { get; private set; }
+    public bool IsOnline  {get;private set;}
     public List<Room> Rooms { get; private set; }
 
 
@@ -21,6 +22,7 @@ public class AppUser
         UserId = userId;
         FirstName = firstName;
         LastName = lastName;
+        IsOnline = false;
     }
 
     public void Update(string firstName, string lastName, string email, string profilePicture)
@@ -29,5 +31,15 @@ public class AppUser
         LastName = lastName;
         Email = email;
         ProfilePicture = profilePicture;
+    }
+
+    public void Online()
+    {
+        IsOnline = true;
+    }
+
+    public void Offline()
+    {
+        IsOnline = false;
     }
 }

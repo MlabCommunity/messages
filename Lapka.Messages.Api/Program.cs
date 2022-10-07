@@ -21,7 +21,9 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(x=>
+    x.AddSignalRSwaggerGen()
+    );
 builder.Services.AddAuth(builder.Configuration);
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);

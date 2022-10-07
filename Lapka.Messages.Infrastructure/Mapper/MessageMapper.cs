@@ -9,7 +9,7 @@ public static class MessageMapper
         => new()
         {
             SenderName = message.SenderName,
-            SenderId = message.SenderId,
+            SenderId = message.ReceiverId,
             Content = message.Content
         };
 }

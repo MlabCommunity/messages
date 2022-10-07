@@ -29,14 +29,14 @@ internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCom
             throw new RoomNotFoundException();
         }
 
-        var user = await _appUserRepository.FindByIdAsync(command.PrincipalId);
-
-        if (user is null)
+        var receiver = room.AppUsers.FirstOrDefault(x => x.UserId != command.PrincipalId);
+        
+        if (receiver is null)
         {
             throw new UserNotFoundException();
         }
 
-        var message = new Message(command.PrincipalId, command.Content, user.FirstName, room);
+        var message = new Message(command.PrincipalId, command.Content, receiver.FirstName, room);
         
         await _messageRepository.AddAsync(message);
 

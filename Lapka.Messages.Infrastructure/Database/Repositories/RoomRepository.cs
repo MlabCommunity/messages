@@ -28,6 +28,7 @@ internal sealed class RoomRepository : IRoomRepository
 
     public async Task<Room> FindById(Guid roomId)
         => await _rooms
+            .Include(x=>x.AppUsers)
             .Include(x => x.Messages)
             .FirstOrDefaultAsync(x => x.RoomId == roomId);
     
