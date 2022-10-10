@@ -10,30 +10,26 @@ namespace Lapka.Messages.Infrastructure.QueryHandlers;
 
 internal sealed class GetAllMessagesQueryHandler : IQueryHandler<GetAllMessagesQuery, Application.Dto.PagedResult<MessageDto>>
 {
-    private readonly DbSet<Room> _rooms;
+    private readonly DbSet<Message> _messages;
 
     public GetAllMessagesQueryHandler(AppDbContext context)
     {
-        _rooms = context.Rooms;
+        _messages = context.Messages;
     }
 
     public async Task<Application.Dto.PagedResult<MessageDto>> HandleAsync(GetAllMessagesQuery query, CancellationToken cancellationToken = new CancellationToken())
     {
-        var messages = await _rooms
-            .Include(x => x.Messages)
-            .Where(x => x.RoomId == query.RoomId)
-            .Select(x => x.Messages
-                .OrderByDescending(x=>x.CreatedAt)
-                .Skip(query.PageSize * (query.PageNumber - 1))
-                .Take(query.PageSize)
-                .Select(x=>x.AsDto()).ToList()).FirstOrDefaultAsync();
+        var messages = await _messages
+            .Where(x => (x.ReceiverId == query.PrincipalId && x.SenderId==query.ReceiverId) || (x.ReceiverId == query.ReceiverId && x.SenderId==query.PrincipalId))
+            .OrderByDescending(x => x.CreatedAt)
+            .Skip(query.PageSize * (query.PageNumber - 1))
+            .Take(query.PageSize)
+            .Select(x => x.AsDto(query.PrincipalId)).ToListAsync();
 
-        var count = await _rooms
-            .Include(x => x.Messages)
-            .Where(x => x.RoomId == query.RoomId)
-            .Select(x => x.Messages.Count())
-            .FirstOrDefaultAsync();
-            
+        var count = await _messages
+            .Where(x => x.ReceiverId == query.PrincipalId)
+            .CountAsync();
+
         return new Application.Dto.PagedResult<MessageDto>(messages, count, query.PageSize, query.PageNumber);
     }
 }

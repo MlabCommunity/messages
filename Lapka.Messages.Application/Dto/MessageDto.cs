@@ -1,8 +1,9 @@
-﻿namespace Lapka.Messages.Application.Dto;
+﻿using Lapka.Messages.Core.Consts;
+
+namespace Lapka.Messages.Application.Dto;
 
 public class MessageDto
 {
-    public string SenderName { get; set; }
-    public Guid SenderId { get; set; }
+    public MessageType Type { get; set; }
     public string Content { get; set; }
 }

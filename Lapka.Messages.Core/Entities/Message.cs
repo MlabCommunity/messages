@@ -8,17 +8,17 @@ public class Message
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public bool IsUnread { get; private set; } 
-    public Guid RoomId { get; private set; }
-    public Room Room { get; private set; }
+    public Guid SenderId { get; private set; }
+    public AppUser SenderUser { get; private set; }
 
     private Message()
     {
     }
 
-    public Message(Guid receiverId, string content,string senderName,Room room)
+    public Message(Guid receiverId, string content,string senderName,AppUser senderUser)
     {
-        Room = room;
-        RoomId = room.RoomId;
+        SenderUser = senderUser;
+        SenderId = senderUser.UserId;
         SenderName = senderName;
         CreatedAt = DateTime.UtcNow;
         MessageId = Guid.NewGuid();

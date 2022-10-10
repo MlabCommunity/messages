@@ -3,6 +3,6 @@
 public interface IMessageRepository
 {
     Task AddAsync(Message message);
-    Task<List<Message>> FindByRoomId(Guid roomId);
     Task UpdateAsync(List<Message> messages);
+    Task<List<Message>> FindByUserIdAndReceiverId(Guid principalId, Guid senderId);
 }

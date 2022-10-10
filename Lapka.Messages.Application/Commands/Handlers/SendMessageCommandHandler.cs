@@ -7,14 +7,12 @@ namespace Lapka.Messages.Application.Commands.Handlers;
 
 internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCommand>
 {
-    private readonly IRoomRepository _roomRepository;
     private readonly IMessageRepository _messageRepository;
     private readonly IAppUserRepository _appUserRepository;
 
-    public SendMessageCommandHandler(IRoomRepository roomRepository, IMessageRepository messageRepository,
+    public SendMessageCommandHandler(IMessageRepository messageRepository,
         IAppUserRepository appUserRepository)
     {
-        _roomRepository = roomRepository;
         _messageRepository = messageRepository;
         _appUserRepository = appUserRepository;
     }
@@ -22,21 +20,17 @@ internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCom
     public async Task HandleAsync(SendMessageCommand command,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var room = await _roomRepository.FindById(command.RoomId);
 
-        if (room is null)
-        {
-            throw new RoomNotFoundException();
-        }
+        var user = await _appUserRepository.FindByIdAsync(command.PrincipalId);
 
-        var receiver = room.AppUsers.FirstOrDefault(x => x.UserId != command.PrincipalId);
-        
-        if (receiver is null)
+        if (user is null)
         {
             throw new UserNotFoundException();
         }
 
-        var message = new Message(command.PrincipalId, command.Content, receiver.FirstName, room);
+        var receiver = await _appUserRepository.FindByIdAsync(command.ReceiverId);
+
+        var message = new Message(receiver.UserId, command.Content, receiver.FirstName, user);
         
         await _messageRepository.AddAsync(message);
 

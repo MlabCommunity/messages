@@ -33,6 +33,7 @@ public static class Extensions
     {
         services.AddSwaggerGen(c =>
         {
+            c.AddSignalRSwaggerGen();
             c.EnableAnnotations();
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {

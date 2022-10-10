@@ -6,19 +6,18 @@ public class AppUser
     public string Email { get; private set; }
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
-    public string? ProfilePicture { get; private set; }
+    public string? ProfilePhoto { get; private set; }
     public bool IsOnline  {get;private set;}
-    public List<Room> Rooms { get; private set; }
-
-
+    public List<Message> Messages { get; private set; }
+    
     private AppUser()
     {
     }
 
-    public AppUser(Guid userId,string email, string firstName, string lastName,string profilePicture)
+    public AppUser(Guid userId,string email, string firstName, string lastName,string profilePhoto)
     {
         Email = email;
-        ProfilePicture = profilePicture;
+        ProfilePhoto = profilePhoto;
         UserId = userId;
         FirstName = firstName;
         LastName = lastName;
@@ -30,7 +29,7 @@ public class AppUser
         FirstName = firstName;
         LastName = lastName;
         Email = email;
-        ProfilePicture = profilePicture;
+        ProfilePhoto = profilePicture;
     }
 
     public void Online()

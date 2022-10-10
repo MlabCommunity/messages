@@ -8,6 +8,7 @@ using Lapka.Pet.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Swashbuckle.AspNetCore.Annotations;
 using MessageDto = Lapka.Messages.Application.Dto.MessageDto;
 
 
@@ -25,18 +26,19 @@ public class MessageController : BaseController
         _commandDispatcher = commandDispatcher;
     }
 
-    [HttpGet("{roomId:guid}")]
+    [HttpGet("{receiverId:guid}")]
+    [SwaggerOperation("Gets paged messages from specific room")]
     public async Task<ActionResult<PagedResult<MessageDto>>> Get(
-        [FromRoute] Guid roomId,
+        [FromRoute] Guid receiverId,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var principalId = GetPrincipalId();
         
-        var command = new ReadMessagesCommand(principalId, roomId);
+        var command = new ReadMessagesCommand(principalId, receiverId);
         await _commandDispatcher.SendAsync(command);
         
-        var query = new GetAllMessagesQuery(principalId, roomId, pageNumber, pageSize);
+        var query = new GetAllMessagesQuery(principalId,receiverId , pageNumber, pageSize);
         var result = await _queryDispatcher.QueryAsync(query);
         
         return Ok(result);

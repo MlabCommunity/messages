@@ -21,9 +21,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerConfiguration();
-builder.Services.AddSwaggerGen(x=>
-    x.AddSignalRSwaggerGen()
-    );
+
 builder.Services.AddAuth(builder.Configuration);
 
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
@@ -46,6 +44,6 @@ app.UseAuthorization();
 
 app.MapGet("/", ctx => ctx.Response.WriteAsync($"Lapka.Messages API {DateTime.Now}"));
 
-app.MapHub<RoomHub>("/chat");
+app.MapHub<RoomHub>("/hub/chat");
 app.MapControllers();
 app.Run();

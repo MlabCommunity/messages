@@ -10,10 +10,9 @@ internal sealed class UserCacheStorage : IUserCacheStorage
     {
         _cacheStorage = cacheStorage;
     }
-    
-    public void SetRoomId(Guid principalId, Guid roomId)
-        => _cacheStorage.Set(principalId.ToString(), roomId);
+    public void SetUnreadMessageCount(string principalId, int count)
+        => _cacheStorage.Set(principalId.ToString(), count);
 
-    public Guid GetRoomId(Guid principalId)
-        => _cacheStorage.Get<Guid>(principalId.ToString());
+    public int GetUnreadMessageCount(string principalId)
+        => _cacheStorage.Get<int>(principalId.ToString());
 }

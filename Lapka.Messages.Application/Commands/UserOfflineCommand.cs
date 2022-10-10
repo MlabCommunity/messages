@@ -2,4 +2,4 @@
 
 namespace Lapka.Messages.Application.Commands;
 
-public record CreateRoomCommand(Guid PrincipalId,Guid ReceiverId) : ICommand;
+public record UserOfflineCommand(Guid PrincipalId) : ICommand;

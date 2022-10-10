@@ -22,13 +22,13 @@ internal sealed class MessageRepository : IMessageRepository
         await _messages.AddAsync(message);
         await _context.SaveChangesAsync();
     }
-
-    public async Task<List<Message>> FindByRoomId(Guid roomId)
-        => await _messages.Where(x => x.RoomId == roomId).ToListAsync();
-
+    
     public async Task UpdateAsync(List<Message> messages)
     {
         _messages.UpdateRange(messages);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<Message>> FindByUserIdAndReceiverId(Guid principalId, Guid senderId)
+        => await _messages.Where(x => x.SenderId == senderId && x.ReceiverId == principalId).ToListAsync();
 }

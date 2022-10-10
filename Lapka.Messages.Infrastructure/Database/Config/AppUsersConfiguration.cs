@@ -10,6 +10,6 @@ internal sealed class AppUsersConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.HasKey(x => x.UserId);
         builder.ToTable("AppUsers");
-        builder.HasMany(x => x.Rooms).WithMany(x => x.AppUsers);
+        builder.HasMany(x => x.Messages).WithOne(x => x.SenderUser).HasForeignKey(x => x.SenderId);
     }
 }
