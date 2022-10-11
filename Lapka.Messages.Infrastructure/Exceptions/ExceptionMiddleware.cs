@@ -20,6 +20,5 @@ internal sealed class ExceptionMiddleware : IMiddleware
             var json = JsonSerializer.Serialize(new { ErrorCode = errorCode, ex.Message });
             await context.Response.WriteAsync(json);
         }
-
     }
 }

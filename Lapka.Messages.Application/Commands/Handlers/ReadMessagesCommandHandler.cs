@@ -1,6 +1,7 @@
 ﻿using Convey.CQRS.Commands;
 using Lapka.Messages.Application.Exceptions;
 using Lapka.Messages.Core.Repositories;
+using Lapka.Pet.Application.Services;
 
 namespace Lapka.Messages.Application.Commands.Handlers;
 
@@ -13,15 +14,17 @@ internal sealed class ReadMessagesCommandHandler : ICommandHandler<ReadMessagesC
         _repository = repository;
     }
 
-    public async Task HandleAsync(ReadMessagesCommand command, CancellationToken cancellationToken = new CancellationToken())
+    public async Task HandleAsync(ReadMessagesCommand command,
+        CancellationToken cancellationToken = new CancellationToken())
     {
-        var messages = await _repository.FindByUserIdAndReceiverId(command.PrincipalId,command.ReceiverId);
-
+        
+        var messages = await _repository.FindByUserIdAndReceiverId(command.PrincipalId, command.ReceiverId);
+    
         if (messages is null)
         {
             throw new RoomNotFoundException();
         }
-        
+
         foreach (var message in messages)
         {
             if (message.ReceiverId == command.PrincipalId)
@@ -29,7 +32,7 @@ internal sealed class ReadMessagesCommandHandler : ICommandHandler<ReadMessagesC
                 message.Read();
             }
         }
-
+        
         await _repository.UpdateAsync(messages);
     }
 }

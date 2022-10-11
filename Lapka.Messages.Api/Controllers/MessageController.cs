@@ -44,4 +44,19 @@ public class MessageController : BaseController
         return Ok(result);
     }
     
+    [HttpGet]
+    [SwaggerOperation("Gets paged messages from specific room")]
+    public async Task<ActionResult<PagedResult<MessageDto>>> Get(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var principalId = GetPrincipalId();
+
+        var query =new GetAllConversationQuery(principalId);
+
+        var result = await _queryDispatcher.QueryAsync(query);
+        
+        return Ok(result);
+    }
+    
 }

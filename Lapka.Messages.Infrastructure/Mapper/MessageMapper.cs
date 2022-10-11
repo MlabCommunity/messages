@@ -6,10 +6,11 @@ namespace Lapka.Messages.Infrastructure.Mapper;
 
 public static class MessageMapper
 {
-    public static MessageDto AsDto(this Message message,Guid principalId)
+    public static MessageDto AsDto(this Message message,Guid senderId)
         => new()
         {
-            Type = message.SenderId == principalId ? MessageType.SENT : MessageType.RECIVED,
+            Type = message.SenderId == senderId ? MessageType.SENT : MessageType.RECIVED,
+            CreatedAt = message.CreatedAt,
             Content = message.Content
         };
 }
