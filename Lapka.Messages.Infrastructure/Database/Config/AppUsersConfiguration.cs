@@ -1,4 +1,5 @@
 ﻿using Lapka.Messages.Core;
+using Lapka.Messages.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +11,6 @@ internal sealed class AppUsersConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.HasKey(x => x.UserId);
         builder.ToTable("AppUsers");
-        builder.HasMany(x => x.Messages).WithOne(x => x.SenderUser).HasForeignKey(x => x.SenderId);
+        builder.HasMany(x => x.Rooms).WithMany(x => x.AppUsers);
     }
 }

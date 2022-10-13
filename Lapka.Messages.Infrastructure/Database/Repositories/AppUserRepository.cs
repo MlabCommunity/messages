@@ -1,4 +1,5 @@
 ﻿using Lapka.Messages.Core;
+using Lapka.Messages.Core.Entities;
 using Lapka.Messages.Core.Repositories;
 using Lapka.Messages.Infrastructure.Database.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ internal sealed class AppUserRepository : IAppUserRepository
 {
     private readonly DbSet<AppUser> _appUsers;
     private readonly AppDbContext _context;
+
     public AppUserRepository(AppDbContext context)
     {
         _context = context;
@@ -26,7 +28,9 @@ internal sealed class AppUserRepository : IAppUserRepository
         => await _appUsers.AnyAsync(x => x.UserId == userId);
 
     public async Task<AppUser> FindByIdAsync(Guid userId)
-        => await _appUsers.FirstOrDefaultAsync(x => x.UserId == userId);
+        => await _appUsers
+            .Include(x => x.Rooms)
+            .FirstOrDefaultAsync(x => x.UserId == userId);
 
     public async Task UpdateAsync(AppUser appUser)
     {

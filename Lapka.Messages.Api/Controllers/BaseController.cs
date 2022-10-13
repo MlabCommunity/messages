@@ -2,7 +2,7 @@
 using Lapka.Messages.Application.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Lapka.Messages.Api;
+namespace Lapka.Messages.Api.Controllers;
 
 [ApiController]
 [Route("[controller]s")]
@@ -34,5 +34,4 @@ public abstract class BaseController : ControllerBase
 
         return role;
     }
-    
 }

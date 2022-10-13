@@ -1,6 +1,6 @@
-using Lapka.Pet.Application.Services;
+using Lapka.Messages.Application.Services;
 
-namespace Lapka.Pet.Infrastructure.CacheStorage;
+namespace Lapka.Messages.Infrastructure.Services;
 
 internal sealed class UserCacheStorage : IUserCacheStorage
 {
@@ -10,9 +10,16 @@ internal sealed class UserCacheStorage : IUserCacheStorage
     {
         _cacheStorage = cacheStorage;
     }
-    public void SetUnreadMessageCount(string principalId, int count)
-        => _cacheStorage.Set(principalId.ToString(), count);
 
-    public int GetUnreadMessageCount(string principalId)
-        => _cacheStorage.Get<int>(principalId.ToString());
+    public void SetReceiverIds(Guid roomId,List<string> receiverIds)
+        => _cacheStorage.Set(roomId.ToString(), receiverIds);
+
+    public List<string> GetReceiverIds(Guid roomId)
+        => _cacheStorage.Get<List<string>>(roomId.ToString());
+
+    public void SetRoomId(Guid principalId, Guid roomId)
+        => _cacheStorage.Set(principalId.ToString(), roomId);
+
+    public Guid GetRoomId(Guid principalId)
+        => _cacheStorage.Get<Guid>(principalId.ToString());
 }

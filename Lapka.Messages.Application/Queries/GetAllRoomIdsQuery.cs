@@ -3,4 +3,4 @@ using Lapka.Messages.Application.Dto;
 
 namespace Lapka.Messages.Application.Queries;
 
-public record GetAllLastMessageQuery(Guid PrincipalId) : IQuery<MessageDto>;
+public record GetAllRoomIdsQuery(Guid PrincipalId) : IQuery<List<string>>;

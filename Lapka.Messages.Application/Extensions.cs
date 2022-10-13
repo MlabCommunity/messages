@@ -23,5 +23,4 @@ public static class Extensions
 
         return builder.Build();
     }
-    
 }

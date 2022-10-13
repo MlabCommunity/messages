@@ -1,4 +1,4 @@
-﻿namespace Lapka.Messages.Infrastructure.Exceptions;
+﻿namespace Lapka.Messages.Application.Exceptions;
 
 public class ProjectException : Exception
 {

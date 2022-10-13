@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Lapka.Messages.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 
 namespace Lapka.Messages.Infrastructure.Exceptions;

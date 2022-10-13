@@ -1,7 +1,9 @@
-namespace Lapka.Pet.Application.Services;
+namespace Lapka.Messages.Application.Services;
 
 public interface IUserCacheStorage
 {
-    void SetUnreadMessageCount(string principalId, int count);
-    int GetUnreadMessageCount(string principalId);
+    void SetReceiverIds(Guid roomId, List<string> receiverIds);
+    List<string> GetReceiverIds(Guid roomId);
+    void SetRoomId(Guid principalId, Guid roomId);
+    Guid GetRoomId(Guid principalId);
 }

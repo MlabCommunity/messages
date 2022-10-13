@@ -1,28 +1,24 @@
-﻿namespace Lapka.Messages.Core;
+﻿namespace Lapka.Messages.Core.Entities;
 
 public class Message
 {
-    public Guid MessageId { get; private set; }
-    public Guid ReceiverId { get; private set; }
-    public string SenderName { get; private set; }
+    public Guid SenderId { get; private set; }
     public string Content { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public bool IsUnread { get; private set; } 
-    public Guid SenderId { get; private set; }
-    public AppUser SenderUser { get; private set; }
+    public bool IsUnread { get; private set; }
+    public Guid RoomId { get; private set; }
+    public Room Room { get; private set; }
 
     private Message()
     {
     }
 
-    public Message(Guid receiverId, string content,string senderName,AppUser senderUser)
+    public Message(Guid senderId, string content, Room room)
     {
-        SenderUser = senderUser;
-        SenderId = senderUser.UserId;
-        SenderName = senderName;
+        Room = room;
+        RoomId = room.RoomId;
         CreatedAt = DateTime.UtcNow;
-        MessageId = Guid.NewGuid();
-        ReceiverId = receiverId;
+        SenderId = senderId;
         Content = content;
         IsUnread = true;
     }

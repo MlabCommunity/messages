@@ -7,5 +7,4 @@ public class UserDto
     public bool IsOnline { get; set; }
     public string? ProfilePhoto { get; set; }
     public string LastMessage { get; set; }
-    
 }

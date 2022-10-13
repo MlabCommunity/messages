@@ -2,4 +2,4 @@
 
 namespace Lapka.Messages.Application.Commands;
 
-public record UserOnlineCommand(Guid PrincipalId) : ICommand;
+public record CreateRoomCommand(Guid PrincipalId, Guid ReceiverId) : ICommand;

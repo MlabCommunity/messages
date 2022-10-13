@@ -2,4 +2,4 @@
 
 namespace Lapka.Messages.Application.Commands;
 
-public record SendMessageCommand(Guid PrincipalId,Guid ReceiverId, string Content) : ICommand;
+public record SendMessageCommand(Guid PrincipalId, Guid RoomId, string Content) : ICommand;

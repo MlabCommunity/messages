@@ -1,7 +1,7 @@
-using Lapka.Pet.Application.Services;
+using Lapka.Messages.Application.Services;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Lapka.Pet.Infrastructure.CacheStorage;
+namespace Lapka.Messages.Infrastructure.Services;
 
 public sealed class CacheStorage : ICacheStorage
 {
@@ -13,7 +13,7 @@ public sealed class CacheStorage : ICacheStorage
     }
 
     public void Set<T>(string key, T value, TimeSpan? duration = null)
-        => _cache.Set(key, value, duration ?? TimeSpan.FromSeconds(5));
+        => _cache.Set(key, value, duration ?? TimeSpan.FromSeconds(5000));
 
     public T Get<T>(string key) => _cache.Get<T>(key);
 }

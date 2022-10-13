@@ -12,8 +12,9 @@ internal sealed class UserDeletedEventHandler : IEventHandler<UserDeletedEvent>
     {
         _repository = repository;
     }
-    
-    public async Task HandleAsync(UserDeletedEvent @event, CancellationToken cancellationToken = new CancellationToken())
+
+    public async Task HandleAsync(UserDeletedEvent @event,
+        CancellationToken cancellationToken = new CancellationToken())
     {
         var user = await _repository.FindByIdAsync(@event.UserId);
 

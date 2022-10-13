@@ -5,8 +5,8 @@ using Convey.CQRS.Queries;
 using Lapka.Messages.Application.Commands;
 using Lapka.Messages.Application.Commands.Handlers;
 using Lapka.Messages.Application.Queries;
+using Lapka.Messages.Application.Services;
 using Lapka.Messages.Core;
-using Lapka.Pet.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
@@ -20,36 +20,50 @@ public class MessageHub : Hub
 {
     private readonly ICommandDispatcher _commandDispatcher;
     private readonly IQueryDispatcher _queryDispatcher;
+    private readonly IUserCacheStorage _storage;
 
-    public MessageHub(ICommandDispatcher dispatcher, IQueryDispatcher queryDispatcher)
+    public MessageHub(ICommandDispatcher dispatcher, IQueryDispatcher queryDispatcher, IUserCacheStorage storage)
     {
         _commandDispatcher = dispatcher;
         _queryDispatcher = queryDispatcher;
+        _storage = storage;
     }
 
-    public async Task SendMessage(string content, string receiverId)
+    public async Task SendMessage(string content, string roomId)
     {
-        var principalId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        var command = new SendMessageCommand(Guid.Parse(principalId), Guid.Parse(receiverId), content);
+        var principalId = Guid.Parse(Context.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        
+        var command = new SendMessageCommand(principalId, Guid.Parse(roomId), content);
         await _commandDispatcher.SendAsync(command);
-        await Clients.Users(new List<string> { receiverId, principalId })
-            .SendAsync("ReceiveMessage", principalId, content);
-
-        // await NotifyReceiveMessage(receiverId);
+        
+        var ids = _storage.GetReceiverIds(Guid.Parse(roomId));
+        Console.WriteLine(ids.Count);
+        await Clients.Users(ids)
+            .SendAsync($"ReceiveMessage:{roomId}",principalId, content);
     }
 
-    public async Task NotifyReceiveMessage(string senderId)
+    public async Task NotifyReceiveMessage(string roomId)
     {
         var command = new ReadMessagesCommand(
             Guid.Parse(Context.User.FindFirstValue(ClaimTypes.NameIdentifier)),
-            Guid.Parse(senderId)
+            Guid.Parse(roomId)
         );
 
         await _commandDispatcher.SendAsync(command);
         await GetUnreadMessagesCount();
     }
 
+    
+    public async Task GetUnreadMessagesCount()
+    {
+        var principalId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var query = new GetUnreadMessageCountQuery(Guid.Parse(principalId));
+
+        var count = await _queryDispatcher.QueryAsync(query);
+        await Clients.User(Context.User.FindFirstValue(ClaimTypes.NameIdentifier))
+            .SendAsync("MessageCount", count.ToString());
+    }
+    
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
@@ -59,8 +73,11 @@ public class MessageHub : Hub
 
         var usersQuery = new GetAllOnlineUserIdQuery(Guid.Parse(principalId));
         var users = await _queryDispatcher.QueryAsync(usersQuery);
-
-        await Clients.Users(users).SendAsync("Online", principalId, true);
+        
+        if (users is not null)
+        {
+            await Clients.Users(users).SendAsync("Online", principalId, true);
+        }
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
@@ -75,27 +92,5 @@ public class MessageHub : Hub
         var users = await _queryDispatcher.QueryAsync(query);
         await Clients.Users(users).SendAsync("Online", principalId, false);
     }
-
-    public async Task GetLastMessage(string receiverId)
-    {
-        var principalId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
-        var query = new GetAllLastMessageQuery(
-            Guid.Parse(principalId)
-        );
-
-        var result = await _queryDispatcher.QueryAsync(query);
-
-        await Clients.User(principalId).SendAsync("LastMessage", result.Content,result.Type.ToString());
-    }
-
-    public async Task GetUnreadMessagesCount()
-    {
-        var principalId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var query = new GetUnreadMessageCountQuery(Guid.Parse(principalId));
-
-        var count = await _queryDispatcher.QueryAsync(query);
-        await Clients.User(Context.User.FindFirstValue(ClaimTypes.NameIdentifier))
-            .SendAsync("MessageCount", count.ToString());
-    }
+    
 }

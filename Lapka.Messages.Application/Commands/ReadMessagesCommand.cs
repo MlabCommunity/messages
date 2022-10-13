@@ -2,4 +2,4 @@
 
 namespace Lapka.Messages.Application.Commands;
 
-public record ReadMessagesCommand(Guid PrincipalId,Guid ReceiverId) : ICommand;
+public record ReadMessagesCommand(Guid PrincipalId, Guid RoomId) : ICommand;

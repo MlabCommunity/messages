@@ -1,4 +1,6 @@
-﻿namespace Lapka.Messages.Core.Repositories;
+﻿using Lapka.Messages.Core.Entities;
+
+namespace Lapka.Messages.Core.Repositories;
 
 public interface IAppUserRepository
 {

@@ -10,7 +10,7 @@ public class PagedResult<T>
 
     public PagedResult(List<T> items, int totalCount, int pageSize, int pageNumber)
     {
-        Items =  items.Cast<object>().ToList(); // TODO : Ask Adam how to solve it
+        Items = items.Cast<object>().ToList(); // TODO : Ask Adam how to solve it
         TotalItemsCount = totalCount;
         ItemFrom = pageSize * (pageNumber - 1) + 1;
         ItemsTo = ItemFrom + pageSize - 1;

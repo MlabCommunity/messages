@@ -13,7 +13,8 @@ internal sealed class UserOfflineCommandHandler : ICommandHandler<UserOfflineCom
         _repository = repository;
     }
 
-    public async Task HandleAsync(UserOfflineCommand command, CancellationToken cancellationToken = new CancellationToken())
+    public async Task HandleAsync(UserOfflineCommand command,
+        CancellationToken cancellationToken = new CancellationToken())
     {
         var user = await _repository.FindByIdAsync(command.PrincipalId);
 
@@ -21,7 +22,7 @@ internal sealed class UserOfflineCommandHandler : ICommandHandler<UserOfflineCom
         {
             throw new UserNotFoundException();
         }
-        
+
         user.Offline();
 
         await _repository.UpdateAsync(user);

@@ -1,4 +1,5 @@
 ﻿using Lapka.Messages.Core;
+using Lapka.Messages.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +10,6 @@ internal sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
     public void Configure(EntityTypeBuilder<Message> builder)
     {
         builder.ToTable("Messages");
-        builder.HasKey(x => x.MessageId);
+        builder.Property<Guid>("Id");
     }
 }

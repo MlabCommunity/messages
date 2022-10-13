@@ -1,8 +1,7 @@
-﻿using Lapka.Messages.Infrastructure.Database;
+﻿using Lapka.Messages.Application.Services;
+using Lapka.Messages.Infrastructure.Database;
 using Lapka.Messages.Infrastructure.Exceptions;
 using Lapka.Messages.Infrastructure.Services;
-using Lapka.Pet.Application.Services;
-using Lapka.Pet.Infrastructure.CacheStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +21,8 @@ public static class Extensions
 
         return services;
     }
-    
-        public static IApplicationBuilder UseMiddleware(this IApplicationBuilder app)
+
+    public static IApplicationBuilder UseMiddleware(this IApplicationBuilder app)
     {
         app.UseMiddleware<ExceptionMiddleware>();
         return app;
@@ -82,5 +81,4 @@ public static class Extensions
                 })
                 .UseSwaggerUI();
     }
-
 }
