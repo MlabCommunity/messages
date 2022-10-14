@@ -1,9 +1,11 @@
-﻿namespace Lapka.Messages.Core.Entities;
+﻿using Lapka.Messages.Core.Consts;
+
+namespace Lapka.Messages.Core.Entities;
 
 public class AppUser
 {
     public Guid UserId { get; private set; }
-    public string Role { get; private set; }
+    public Role Role { get; private set; }
     public bool IsOnline { get; private set; }
     public List<Room> Rooms { get; private set; }
 
@@ -11,11 +13,16 @@ public class AppUser
     {
     }
 
-    public AppUser(Guid userId, string email, string firstName, string lastName, string? profilePhoto)
+    public AppUser(Guid userId,Role role)
     {
         UserId = userId;
-
+        Role = role;
         IsOnline = false;
+    }
+
+    public void SetRole(Role role)
+    {
+        Role = role;
     }
 
     

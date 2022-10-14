@@ -23,7 +23,7 @@ internal sealed class RoomRepository : IRoomRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Room> FindById(Guid roomId)
+    public async Task<Room> FindAsync(Guid roomId)
         => await _rooms
             .Include(x => x.AppUsers)
             .Include(x=>x.Messages)

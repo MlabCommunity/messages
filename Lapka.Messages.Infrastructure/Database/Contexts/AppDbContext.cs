@@ -9,6 +9,7 @@ internal class AppDbContext : DbContext
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<Message> Messages { get; set; }
     public DbSet<Room> Rooms { get; set; }
+    public DbSet<Worker> Workers { get; set; }
 
     public AppDbContext(DbContextOptions options) : base(options)
     {

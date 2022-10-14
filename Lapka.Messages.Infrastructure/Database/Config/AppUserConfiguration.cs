@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lapka.Messages.Infrastructure.Database.Config;
 
-internal sealed class AppUsersConfiguration : IEntityTypeConfiguration<AppUser>
+internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
 {
     public void Configure(EntityTypeBuilder<AppUser> builder)
     {

@@ -1,4 +1,5 @@
 ﻿using Convey;
+using Lapka.Messages.Application.ExternalEvents;
 using Lapka.Messages.Core.Repositories;
 using Lapka.Messages.Infrastructure.Database.Contexts;
 using Lapka.Messages.Infrastructure.Database.Repositories;
@@ -15,6 +16,7 @@ public static class Extensions
         services.AddScoped<IAppUserRepository, AppUserRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
         services.AddScoped<IRoomRepository, RoomRepository>();
+        services.AddScoped<IWorkerRepository, WorkerRepository>();
 
         var options = configuration.GetOptions<PostgresOptions>("Postgres");
         services.AddDbContext<AppDbContext>(ctx =>

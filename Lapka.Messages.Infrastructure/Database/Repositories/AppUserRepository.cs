@@ -27,7 +27,7 @@ internal sealed class AppUserRepository : IAppUserRepository
     public async Task<bool> ExistAsync(Guid userId)
         => await _appUsers.AnyAsync(x => x.UserId == userId);
 
-    public async Task<AppUser> FindByIdAsync(Guid userId)
+    public async Task<AppUser> FindAsync(Guid userId)
         => await _appUsers
             .Include(x => x.Rooms)
             .FirstOrDefaultAsync(x => x.UserId == userId);

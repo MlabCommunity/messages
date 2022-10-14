@@ -24,7 +24,7 @@ internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCom
     public async Task HandleAsync(SendMessageCommand command,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var room = await _roomRepository.FindById(command.RoomId);
+        var room = await _roomRepository.FindAsync(command.RoomId);
 
         if (room is null)
         {
@@ -34,9 +34,5 @@ internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCom
         var message = new Message(command.PrincipalId, command.Content, room);
 
         await _messageRepository.AddAsync(message);
-
-        _storage.SetReceiverIds(room.RoomId, room.AppUsers.Select(x => x.UserId.ToString()).ToList());
-
-        var x = _storage.GetReceiverIds(room.RoomId);
     }
 }

@@ -32,7 +32,9 @@ app.UseConvey();
 app.UseRabbitMq()
     .SubscribeEvent<UserDeletedEvent>()
     .SubscribeEvent<UserUpdatedEvent>()
-    .SubscribeEvent<UserCreatedEvent>();
+    .SubscribeEvent<UserCreatedEvent>()
+    .SubscribeEvent<WorkerAddedEvent>()
+    .SubscribeEvent<WorkerRemovedEvent>();
 
 app.UseSwaggerDocs();
 

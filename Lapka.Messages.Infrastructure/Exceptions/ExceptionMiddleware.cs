@@ -21,5 +21,9 @@ internal sealed class ExceptionMiddleware : IMiddleware
             var json = JsonSerializer.Serialize(new { ErrorCode = errorCode, ex.Message });
             await context.Response.WriteAsync(json);
         }
+        catch (ProjectForbidden ex)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        }
     }
 }

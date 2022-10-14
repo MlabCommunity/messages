@@ -36,14 +36,14 @@ internal sealed class CreateRoomCommandHandler : ICommandHandler<CreateRoomComma
             return;
         }
 
-        var receiver = await _appUserRepository.FindByIdAsync(command.ReceiverId);
+        var receiver = await _appUserRepository.FindAsync(command.ReceiverId);
 
         if (receiver is null)
         {
             throw new UserNotFoundException();
         }
 
-        var principal = await _appUserRepository.FindByIdAsync(command.PrincipalId);
+        var principal = await _appUserRepository.FindAsync(command.PrincipalId);
 
         if (principal is null)
         {

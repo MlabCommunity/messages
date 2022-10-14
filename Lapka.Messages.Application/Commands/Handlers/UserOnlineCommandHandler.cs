@@ -16,7 +16,7 @@ internal sealed class UserOnlineCommandHandler : ICommandHandler<UserOnlineComma
     public async Task HandleAsync(UserOnlineCommand command,
         CancellationToken cancellationToken = new CancellationToken())
     {
-        var user = await _repository.FindByIdAsync(command.PrincipalId);
+        var user = await _repository.FindAsync(command.PrincipalId);
 
         if (user is null)
         {

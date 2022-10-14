@@ -9,10 +9,7 @@ internal static class UserMapper
     public static UserDto AsDto(this AppUser user, string lastMessage)
         => new()
         {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
             IsOnline = user.IsOnline,
-            ProfilePhoto = user.ProfilePhoto,
             LastMessage = lastMessage,
         };
 }
