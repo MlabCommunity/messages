@@ -11,14 +11,11 @@ internal sealed class SendMessageCommandHandler : ICommandHandler<SendMessageCom
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IRoomRepository _roomRepository;
-    private readonly IUserCacheStorage _storage;
-
-    public SendMessageCommandHandler(IMessageRepository messageRepository, IRoomRepository roomRepository,
-        IUserCacheStorage storage)
+    
+    public SendMessageCommandHandler(IMessageRepository messageRepository, IRoomRepository roomRepository)
     {
         _messageRepository = messageRepository;
         _roomRepository = roomRepository;
-        _storage = storage;
     }
 
     public async Task HandleAsync(SendMessageCommand command,

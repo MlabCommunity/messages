@@ -28,6 +28,15 @@ internal sealed class SendMessageAsShelterCommandHandler : ICommandHandler<SendM
     public async Task HandleAsync(SendMessageAsShelterCommand command,
         CancellationToken cancellationToken = new CancellationToken())
     {
+
+        var shelterId = _storage.GetShelterId(command.PrincipalId);
+
+        if (shelterId != Guid.Empty)
+        {
+            _storage.SetShelterId(command.PrincipalId,shelterId);
+            return;
+        }
+        
         var user = await _userRepository.FindAsync(command.PrincipalId);
 
         if (user is null)

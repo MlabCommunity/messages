@@ -24,6 +24,10 @@ public class RoomController : BaseController
     }
 
     [HttpPost("{receiverId:guid}")]
+    [SwaggerOperation(summary: "Creates room")]
+    [SwaggerResponse(200, "Room Created, returns roomId")]
+    [SwaggerResponse(404,"User not found")]
+
     public async Task<IActionResult> Create([FromRoute] Guid receiverId)
     {
         var principalId = GetPrincipalId();
@@ -38,6 +42,7 @@ public class RoomController : BaseController
 
     [HttpGet]
     [SwaggerOperation("Gets paged messages from specific room")]
+    [SwaggerResponse(200, "Returns paged rooms",typeof(Application.Dto.PagedResult<RoomDto>))]
     public async Task<ActionResult<Application.Dto.PagedResult<MessageDto>>> Get(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -46,6 +51,25 @@ public class RoomController : BaseController
 
         var query = new GetAllRoomsQuery(principalId, pageNumber, pageSize);
 
+        var result = await _queryDispatcher.QueryAsync(query);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{receiverId:guid}")]
+    [SwaggerOperation("Gets paged messages from specific room")]
+    [SwaggerResponse(200, "Returns paged messages",typeof(Application.Dto.PagedResult<MessageDto>))]
+    public async Task<ActionResult<Application.Dto.PagedResult<MessageDto>>> Get(
+        [FromRoute] Guid receiverId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var principalId = GetPrincipalId();
+
+        var command = new ReadMessagesCommand(principalId, receiverId);
+        await _commandDispatcher.SendAsync(command);
+
+        var query = new GetAllMessagesQuery(principalId, receiverId, pageNumber, pageSize);
         var result = await _queryDispatcher.QueryAsync(query);
 
         return Ok(result);
